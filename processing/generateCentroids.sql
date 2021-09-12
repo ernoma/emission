@@ -5,8 +5,8 @@ CREATE TABLE delineations.centroids AS
     WHERE keskustyyp != 'Kaupunkiseudun pieni alakeskus';
     
 /* Päivitetään geometriat kaupunkiseutujen keskustojen osalta (ydinkeskusten keskipisteet saadaan tarkimmin Urban Zone-vyöhykeaineiston kävelykeskustojen keskipisteistä). */
-update delinations.centroids centroids
+update delineations.centroids centroids
 SET geom = ST_CENTROID(gsq.geom)
-FROM (SELECT (st_dump(st_union(g.geom))).geom AS geom FROM grid g WHERE g.zone = 1) gsq
+FROM (SELECT (st_dump(st_union(g.geom))).geom AS geom FROM delineations.grid g WHERE g.zone = 1) gsq
 WHERE ST_INTERSECTS(centroids.geom, gsq.geom);
 CREATE INDEX ON delineations.centroids USING GIST (geom);
